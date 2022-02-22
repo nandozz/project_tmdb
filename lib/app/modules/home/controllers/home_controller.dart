@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 class HomeController extends GetxController {
   //TODO: Implement HomeController
 
-  final count = 0.obs;
+  RxInt indexPage = 0.obs; //Now = 0.obs;
+  void changePage(int index) => indexPage.value = index;
   @override
   void onInit() {
     super.onInit();
@@ -16,5 +17,4 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }

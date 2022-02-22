@@ -23,33 +23,24 @@ class SplashView extends GetView<SplashController> {
       builder: (controller) => Scaffold(
         body: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xff00DDD0), Color(0xff0E2625)]),
-              ),
-            ),
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 125, bottom: 25),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Image.asset('assets/images/splash-image.png'),
                     Text(
-                      'Your parcel receiver',
+                      'Watch Now',
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: Colors.black,
                         fontSize: 20,
                       ),
                     ),
                     Text(
-                      'cubox',
+                      'TMDB',
                       style: TextStyle(
                         letterSpacing: 55,
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 30,
                       ),
                     ),
