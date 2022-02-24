@@ -23,29 +23,14 @@ class SplashView extends GetView<SplashController> {
       builder: (controller) => Scaffold(
         body: Stack(
           children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 125, bottom: 25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Watch Now',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      'TMDB',
-                      style: TextStyle(
-                        letterSpacing: 55,
-                        color: Colors.black,
-                        fontSize: 30,
-                      ),
-                    ),
-                  ],
-                ),
+            Image.asset('assets/images/splashimage.jpg',
+                height: Get.height, width: Get.width, fit: BoxFit.cover),
+            Positioned(
+              bottom: 20,
+              left: 10,
+              child: Text(
+                'visualized\nyour\nimagination',
+                style: TextStyle(color: Colors.white, fontSize: 36),
               ),
             ),
           ],

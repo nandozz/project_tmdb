@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:tmdb_test/app/modules/home/widgets/favorite_widgets.dart';
+import 'package:tmdb_test/app/modules/home/widgets/tvshow_widgets.dart';
 import 'package:tmdb_test/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
-import '../widgets/home_widgets.dart';
+import '../widgets/movie_widgets.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -17,8 +18,9 @@ class HomeView extends GetView<HomeController> {
           () => IndexedStack(
             index: controller.indexPage.value,
             children: [
-              HomePage(),
+              MoviePage(),
               FavoritePage(),
+              TvPage(),
             ],
           ),
         ),
@@ -33,12 +35,11 @@ class HomeView extends GetView<HomeController> {
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.home,
-
+                  Icons.movie,
                   size: 30,
                   // color: Color(0xff136A5A),
                 ),
-                label: 'Home',
+                label: 'Movie',
               ),
               BottomNavigationBarItem(
                 icon: Icon(
@@ -46,6 +47,14 @@ class HomeView extends GetView<HomeController> {
                   size: 30,
                 ),
                 label: 'Favorite',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.live_tv,
+                  size: 30,
+                  // color: Color(0xff136A5A),
+                ),
+                label: 'TV Show',
               ),
             ],
           )),

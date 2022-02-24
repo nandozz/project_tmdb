@@ -2,38 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tmdb_test/app/modules/home/views/detail_view.dart';
 
-class ListCard extends StatelessWidget {
-  String category;
-  List<Map<String, dynamic>> film;
+// class ListCard extends StatelessWidget {
+//   String category;
+//   List<Map<String, dynamic>> film;
 
-  ListCard({Key? key, required this.category, required this.film})
-      : super(key: key);
+//   ListCard({Key? key, required this.category, required this.film})
+//       : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 20),
-          Text(
-            category,
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-          SizedBox(height: 15),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: film.map((e) => ViewCard(desicriptoin: e)).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           SizedBox(height: 20),
+//           Text(
+//             category,
+//             style: TextStyle(
+//                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+//           ),
+//           SizedBox(height: 15),
+//           SingleChildScrollView(
+//             scrollDirection: Axis.horizontal,
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               children: film.map((e) => ViewCard(desicriptoin: e)).toList(),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class ViewCard extends StatelessWidget {
   Map<String, dynamic> desicriptoin;
