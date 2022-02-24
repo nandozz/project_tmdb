@@ -1,21 +1,21 @@
 // To parse this JSON data, do
 //
-//     final popular = popularFromJson(jsonString);
+//     final topRated = topRatedFromJson(jsonString);
 
 import 'dart:convert';
 
-Popular popularFromJson(String str) => Popular.fromJson(json.decode(str));
+TopRated topRatedFromJson(String str) => TopRated.fromJson(json.decode(str));
 
-String popularToJson(Popular data) => json.encode(data.toJson());
+String topRatedToJson(TopRated data) => json.encode(data.toJson());
 
-class Popular {
-  Popular({
+class TopRated {
+  TopRated({
     required this.results,
   });
 
   List<Result> results;
 
-  factory Popular.fromJson(Map<String, dynamic> json) => Popular(
+  factory TopRated.fromJson(Map<String, dynamic> json) => TopRated(
         results:
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
       );
@@ -33,7 +33,6 @@ class Result {
     this.title,
     this.voteAverage,
   });
-
   int? id;
   String? overview;
   String? posterPath;

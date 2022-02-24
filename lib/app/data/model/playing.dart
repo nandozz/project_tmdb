@@ -1,27 +1,45 @@
-// To parse this JSON data, do
-//
-//     final popular = popularFromJson(jsonString);
-
 import 'dart:convert';
 
-Popular popularFromJson(String str) => Popular.fromJson(json.decode(str));
+Playing playingFromJson(String str) => Playing.fromJson(json.decode(str));
 
-String popularToJson(Popular data) => json.encode(data.toJson());
+String playingToJson(Playing data) => json.encode(data.toJson());
 
-class Popular {
-  Popular({
+class Playing {
+  Playing({
     required this.results,
   });
 
   List<Result> results;
 
-  factory Popular.fromJson(Map<String, dynamic> json) => Popular(
+  factory Playing.fromJson(Map<String, dynamic> json) => Playing(
         results:
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
+      };
+}
+
+class Dates {
+  Dates({
+    this.maximum,
+    this.minimum,
+  });
+
+  DateTime? maximum;
+  DateTime? minimum;
+
+  factory Dates.fromJson(Map<String, dynamic> json) => Dates(
+        maximum: DateTime.parse(json["maximum"]),
+        minimum: DateTime.parse(json["minimum"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "maximum":
+            "${maximum!.year.toString().padLeft(4, '0')}-${maximum!.month.toString().padLeft(2, '0')}-${maximum!.day.toString().padLeft(2, '0')}",
+        "minimum":
+            "${minimum!.year.toString().padLeft(4, '0')}-${minimum!.month.toString().padLeft(2, '0')}-${minimum!.day.toString().padLeft(2, '0')}",
       };
 }
 

@@ -25,138 +25,141 @@ class MoviePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Category(category: 'Now Playing'),
-                  Category(category: 'Top Rated'),
-                  Category(category: 'Popular'),
-                  Category(category: 'Upcoming'),
+                  Category(category: 'Now Playing', fetch: 'now_playing'),
+                  Category(category: 'Top Rated', fetch: 'top_rated'),
+                  Category(category: 'Popular', fetch: 'popular'),
+                  Category(category: 'Upcoming', fetch: 'upcoming'),
                 ],
               ),
             ),
-            Container(
-              height: Get.height * 0.68,
-              // color: Colors.amber,
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 2 / 3,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
-                itemCount: homeController.popularList.value.length,
-                itemBuilder: (BuildContext ctx, index) {
-                  return GestureDetector(
-                      onTap: () {
-                        Get.to(DetailView());
-                      },
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.network(
-                                'https://image.tmdb.org/t/p/original/${homeController.popularList.value[index].posterPath}',
-                                fit: BoxFit.cover,
-                                width: Get.width,
-                                loadingBuilder: (BuildContext context,
-                                    Widget child,
-                                    ImageChunkEvent? loadingProgress) {
-                                  if (loadingProgress == null) {
-                                    return child;
-                                  }
-                                  return Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          homeController
-                                              .popularList.value[index].title,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
+            Obx(
+              () => Container(
+                height: Get.height * 0.68,
+                // color: Colors.amber,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 2 / 3,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20),
+                  itemCount: homeController.allData.value.length,
+                  itemBuilder: (BuildContext ctx, index) {
+                    return GestureDetector(
+                        onTap: () {
+                          Get.to(DetailView());
+                        },
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.network(
+                                  'https://image.tmdb.org/t/p/original/${homeController.allData.value[index].posterPath}',
+                                  fit: BoxFit.cover,
+                                  width: Get.width,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            homeController
+                                                .allData.value[index].title,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black87,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        bottomRight: Radius.circular(20),
+                              Container(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black87,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 15,
+                                          ),
+                                          Text(
+                                            homeController.allData.value[index]
+                                                .voteAverage
+                                                .toString(),
+                                            style: TextStyle(
+                                                color: Colors.amber,
+                                                fontSize: 18),
+                                            // textAlign: TextAlignVertical.center,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                          size: 15,
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white70,
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20),
                                         ),
-                                        Text(
-                                          homeController.popularList
-                                              .value[index].voteAverage
-                                              .toString(),
-                                          style: TextStyle(
-                                              color: Colors.amber,
-                                              fontSize: 18),
-                                          // textAlign: TextAlignVertical.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white70,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(20),
-                                        bottomLeft: Radius.circular(20),
                                       ),
+                                      child: IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            Icons.favorite_outline,
+                                            color: Colors.black,
+                                          )),
                                     ),
-                                    child: IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.favorite_outline,
-                                          color: Colors.black,
-                                        )),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ));
-                },
+                            ],
+                          ),
+                        ));
+                  },
+                ),
               ),
             ),
           ],
@@ -168,38 +171,44 @@ class MoviePage extends StatelessWidget {
 
 class Category extends StatelessWidget {
   String category;
+  String fetch;
   Category({
     Key? key,
     required this.category,
+    required this.fetch,
     // required this.index,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          // print(index);
-          homeController.categoryMovie.value = category;
-          // homeController.changeCategory(index);
-        },
-        child: Obx(() => Container(
-              height: 30,
-              margin: EdgeInsets.only(bottom: 40),
-              // color: Colors.amber,
-              child: Center(
-                child: Text(
-                  category,
-                  style: TextStyle(
-                      color: category == homeController.categoryMovie.value
-                          ? Colors.white
-                          : Colors.black87,
-                      fontSize: 18,
-                      fontWeight: category == homeController.categoryMovie.value
-                          ? FontWeight.w800
-                          : FontWeight.normal),
-                ),
+    return Obx(() => GestureDetector(
+          onTap: () {
+            // print(index);
+            homeController.categoryMovie.value = category;
+            homeController.fetchCategory.value = fetch;
+            homeController.fetchMovie();
+            // print(
+            //     '${homeController.categoryMovie.value} - ${homeController.fetchCategory.value}');
+          },
+          child: Container(
+            height: 30,
+            margin: EdgeInsets.only(bottom: 40),
+            // color: Colors.amber,
+            child: Center(
+              child: Text(
+                category,
+                style: TextStyle(
+                    color: category == homeController.categoryMovie.value
+                        ? Colors.white
+                        : Colors.black87,
+                    fontSize: 18,
+                    fontWeight: category == homeController.categoryMovie.value
+                        ? FontWeight.w800
+                        : FontWeight.normal),
               ),
-            )));
+            ),
+          ),
+        ));
   }
 }
 
@@ -270,21 +279,6 @@ class UserWidget extends StatelessWidget {
             ],
           ),
         ),
-
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: Icon(
-        //     Icons.search,
-        //     color: Colors.white,
-        //     size: 30,
-        //   ),
-        // ),
-        // CircleAvatar(
-        //   radius: 40,
-        //   backgroundColor: Colors.blueGrey[100],
-        //   backgroundImage: NetworkImage(
-        //       'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'),
-        // ),
       ],
     );
   }
