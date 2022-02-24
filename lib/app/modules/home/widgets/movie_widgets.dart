@@ -46,7 +46,8 @@ class MoviePage extends StatelessWidget {
                   itemBuilder: (BuildContext ctx, index) {
                     return GestureDetector(
                         onTap: () {
-                          Get.to(DetailView());
+                          Get.to(() => DetailView(
+                              detail: homeController.allData.value[index]));
                         },
                         child: DecoratedBox(
                           decoration: BoxDecoration(
@@ -58,44 +59,48 @@ class MoviePage extends StatelessWidget {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
-                                child: Image.network(
-                                  'https://image.tmdb.org/t/p/original/${homeController.allData.value[index].posterPath}',
-                                  fit: BoxFit.cover,
-                                  width: Get.width,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    }
-                                    return Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            homeController
-                                                .allData.value[index].title,
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          CircularProgressIndicator(
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
+                                child: Hero(
+                                  tag:
+                                      '${homeController.allData.value[index].posterPath}',
+                                  child: Image.network(
+                                    'https://image.tmdb.org/t/p/original/${homeController.allData.value[index].posterPath}',
+                                    fit: BoxFit.cover,
+                                    width: Get.width,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+                                      return Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              homeController
+                                                  .allData.value[index].title,
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                               Container(

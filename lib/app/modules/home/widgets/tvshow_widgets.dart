@@ -55,7 +55,8 @@ class TvPage extends StatelessWidget {
                 itemBuilder: (BuildContext ctx, index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.to(DetailView());
+                      Get.to(DetailView(
+                          detail: homeController.allData.value[index]));
                     },
                     child: Container(
                       // alignment: Alignment.center,
@@ -166,7 +167,8 @@ class TabView extends StatelessWidget {
                         itemBuilder: (BuildContext ctx, index) {
                           return GestureDetector(
                             onTap: () {
-                              Get.to(DetailView());
+                              Get.to(DetailView(
+                                  detail: homeController.allData.value[index]));
                             },
                             child: Container(
                               alignment: Alignment.center,
