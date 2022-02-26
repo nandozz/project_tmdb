@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:tmdb_test/app/modules/home/controllers/home_controller.dart';
 
+import '../model/cast.dart';
 import '../model/movie.dart';
 import '../model/playing.dart';
 import '../model/popular.dart';
@@ -45,6 +46,20 @@ class RemoteServices {
     }
   }
 
+  static Future<Cast?> fetchCast(int id) async {
+    var response = await client.get(
+      Uri.parse(
+          'https://api.themoviedb.org/3/movie/$id/credits?api_key=${apikey}&language=en-US'),
+    );
+
+    if (response.statusCode == 200) {
+      var jsonString = response.body;
+      return castFromJson(jsonString);
+    } else {
+      //error message
+      return null;
+    }
+  }
   // static Future<Popular?> fetchPopular() async {
   //   var response = await client.get(
   //     Uri.parse('https://api.themoviedb.org/3/movie/popular?api_key=$apikey'),

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tmdb_test/app/modules/home/controllers/home_controller.dart';
 import 'package:tmdb_test/app/modules/home/views/detail_view.dart';
-
+import 'dart:convert';
 // import 'package:tmdb_test/app/modules/home/widgets/card.dart';
 
 HomeController homeController = Get.find<HomeController>();
+// bool isFavorite = true;
+String favoriteName = '';
 
 class MoviePage extends StatelessWidget {
   MoviePage({
@@ -34,8 +36,7 @@ class MoviePage extends StatelessWidget {
             ),
             Obx(
               () => Container(
-                height: Get.height * 0.68,
-                // color: Colors.amber,
+                height: Get.height,
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
@@ -44,10 +45,27 @@ class MoviePage extends StatelessWidget {
                       mainAxisSpacing: 20),
                   itemCount: homeController.allData.value.length,
                   itemBuilder: (BuildContext ctx, index) {
+                    favoriteName = '';
+                    homeController.movieFovorite.value.length > 0
+                        ? homeController.movieFovorite.value.forEach((element) {
+                            favoriteName += json.encode(element['title']);
+                          })
+                        : null;
+
+                    String title =
+                        '"${homeController.allData.value[index].title}"';
+
+                    bool isFavorite = favoriteName.contains(title);
+                    print(
+                        'Check favorite Name $index: $title - $favoriteName - $isFavorite');
                     return GestureDetector(
                         onTap: () {
-                          Get.to(() => DetailView(
-                              detail: homeController.allData.value[index]));
+                          homeController.readFavorite();
+                          Get.to(
+                            () => DetailView(
+                              detail: homeController.allData.value[index],
+                            ),
+                          );
                         },
                         child: DecoratedBox(
                           decoration: BoxDecoration(
@@ -151,10 +169,34 @@ class MoviePage extends StatelessWidget {
                                         ),
                                       ),
                                       child: IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            if (isFavorite) {
+                                              homeController.movieFovorite
+                                                  .remove(homeController
+                                                      .allData[index]);
+                                              homeController.saveFavorite();
+                                              print(
+                                                  'REMOVE from Movie : ${homeController.allData[index].title}');
+                                            } else {
+                                              print('ADD from Movie');
+                                              homeController.movieFovorite.add(
+                                                  homeController.allData[index]
+                                                      .toJson());
+                                            }
+
+                                            homeController.saveFavorite();
+                                            print(
+                                                '${homeController.allData.value[index].title} Saved');
+                                            print(homeController
+                                                .movieFovorite.value);
+                                          },
                                           icon: Icon(
-                                            Icons.favorite_outline,
-                                            color: Colors.black,
+                                            isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_outline,
+                                            color: isFavorite
+                                                ? Colors.red
+                                                : Colors.black,
                                           )),
                                     ),
                                   ],
@@ -196,17 +238,22 @@ class Category extends StatelessWidget {
             //     '${homeController.categoryMovie.value} - ${homeController.fetchCategory.value}');
           },
           child: Container(
-            height: 30,
+            padding: EdgeInsets.all(10),
+            // height: 40,
             margin: EdgeInsets.only(bottom: 40),
-            // color: Colors.amber,
+            decoration: BoxDecoration(
+                color: category == homeController.categoryMovie.value
+                    ? Colors.black87
+                    : Colors.transparent,
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Center(
               child: Text(
                 category,
                 style: TextStyle(
                     color: category == homeController.categoryMovie.value
                         ? Colors.white
-                        : Colors.black87,
-                    fontSize: 18,
+                        : Colors.grey,
+                    fontSize: 14,
                     fontWeight: category == homeController.categoryMovie.value
                         ? FontWeight.w800
                         : FontWeight.normal),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tmdb_test/app/modules/home/widgets/card.dart';
+
+import '../controllers/home_controller.dart';
+
+HomeController homeController = Get.find<HomeController>();
 
 class FavoritePage extends StatelessWidget {
   const FavoritePage({
@@ -36,11 +39,16 @@ class FavoritePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey[100],
-                  backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'),
+                GestureDetector(
+                  onTap: () {
+                    homeController.clearFavorite();
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.grey[100],
+                    backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80'),
+                  ),
                 ),
               ],
             ),
@@ -74,25 +82,191 @@ class FavoritePage extends StatelessWidget {
                   Container(
                     height: Get.height * 0.65,
                     width: Get.width,
-                    child: Expanded(
-                      child: TabBarView(children: [
-                        Container(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [],
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: TabBarView(children: [
+                            Container(
+                              child: Obx(
+                                () => GridView.builder(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 200,
+                                          childAspectRatio: 2 / 3,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20),
+                                  itemCount:
+                                      homeController.movieFovorite.value.length,
+                                  itemBuilder: (BuildContext ctx, index) {
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        border: Border.all(),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.network(
+                                              'https://image.tmdb.org/t/p/original/${homeController.movieFovorite[index]['poster_path']}',
+                                              fit: BoxFit.cover,
+                                              width: Get.width,
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        homeController.allData
+                                                            .value[index].title,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      CircularProgressIndicator(
+                                                        value: loadingProgress
+                                                                    .expectedTotalBytes !=
+                                                                null
+                                                            ? loadingProgress
+                                                                    .cumulativeBytesLoaded /
+                                                                loadingProgress
+                                                                    .expectedTotalBytes!
+                                                            : null,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black87,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(20),
+                                                      bottomRight:
+                                                          Radius.circular(20),
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                        size: 15,
+                                                      ),
+                                                      Text(
+                                                        homeController
+                                                            .allData
+                                                            .value[index]
+                                                            .voteAverage
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            color: Colors.amber,
+                                                            fontSize: 18),
+                                                        // textAlign: TextAlignVertical.center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white70,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(20),
+                                                      bottomLeft:
+                                                          Radius.circular(20),
+                                                    ),
+                                                  ),
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        // Get.defaultDialog(title:'Remove ${ }');
+                                                        Get.defaultDialog(
+                                                          title: 'Delete',
+                                                          middleText:
+                                                              'Are you sure to delete ${homeController.movieFovorite[index]['title']} ?',
+                                                          textCancel: 'Cancel',
+                                                          cancelTextColor:
+                                                              Colors.black87,
+                                                          textConfirm: 'OK',
+                                                          confirmTextColor:
+                                                              Colors.white,
+                                                          buttonColor:
+                                                              Colors.black87,
+                                                          onCancel: () {},
+                                                          onConfirm: () {
+                                                            homeController
+                                                                .movieFovorite
+                                                                .remove(homeController
+                                                                        .movieFovorite[
+                                                                    index]);
+                                                            homeController
+                                                                .saveFavorite();
+                                                            Get.back();
+                                                          },
+                                                        );
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.favorite,
+                                                        color: Colors.red,
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        //TV Show field
-                        Container(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [],
+                            //TV Show field
+                            Container(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Text('TV Show Data'),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                          ]),
                         ),
-                      ]),
+                      ],
                     ),
                   ),
                 ],
