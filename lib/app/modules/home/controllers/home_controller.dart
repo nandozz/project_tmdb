@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tmdb_test/app/data/services/remote_services.dart';
@@ -6,15 +7,19 @@ import 'dart:convert';
 import '../../../data/model/movie.dart';
 
 class HomeController extends GetxController {
+  final ScrollController scrollController = ScrollController();
+
   RxString categoryMovie = 'Now Playing'.obs;
   RxString fetchCategory = 'now_playing'.obs;
 
   RxString categoryTvShow = 'On the Air'.obs;
   RxInt indexPage = 0.obs;
   RxInt indexCategory = 0.obs;
+  RxInt dataPage = 1.obs;
 
   RxList allData = [].obs;
   RxList allCast = [].obs;
+  RxList allVideos = [].obs;
 
   RxList movieFovorite = [].obs;
   RxList tvshowFovorite = [].obs;
@@ -30,11 +35,15 @@ class HomeController extends GetxController {
     }
   }
 
-  void fetchMovie() async {
-    var data = await RemoteServices.fetchMovie();
+  void fetchMovie(int page) async {
+    var data = await RemoteServices.fetchMovie(page);
     if (data != null) {
-      allData.value = data.results;
+      allData.value.addAll(data.results);
+      allData.refresh();
+
+      // allData.value = receiveData.value;
       // print('allData - : ${allData.value[0].title}');
+      print('allData length: ${allData.value.length}');
     } else {
       print('error add datanya cuy');
     }
@@ -49,33 +58,17 @@ class HomeController extends GetxController {
       print('error add datanya cuy');
     }
   }
-  // void fetchPopular() async {
-  //   var popular = await RemoteServices.fetchPopular();
-  //   if (popular != null) {
-  //     // popularList.value = popular.results;
-  //     allData.value = popular.results;
-  //   } else {
-  //     print('error add datanya cuy');
-  //   }
-  // }
-  // void fetchTopRated() async {
-  //   var data = await RemoteServices.fetchTopRated();
-  //   if (data != null) {
-  //     allData.value = data.results;
 
-  //     print('allData cuy');
-  //   } else {
-  //     print('error add datanya cuy');
-  //   }
-  // }
+  void fetchVideos(int id) async {
+    var data = await RemoteServices.fetchVideos(id);
+    if (data != null) {
+      allVideos.value = data.results;
+      print('allVideos - : ${allVideos.value[0].key}');
+    } else {
+      print('error add datanya cuy');
+    }
+  }
 
-  //  homeController.movieFovorite.add(
-  //                                             json.encode(
-  //                                               homeController
-  //                                                   .allData.value[index]
-  //                                                   .toJson(),
-  //                                             ),
-  //                                           );
   void saveFavorite() async {
     movieFovorite.value = movieFovorite.toSet().toList();
     tvshowFovorite.value = tvshowFovorite.toSet().toList();
@@ -117,8 +110,17 @@ class HomeController extends GetxController {
     super.onInit();
     readFavorite();
     fetchPlaying();
-    // fetchCast(634649);
-    // fetchMovie();
+    scrollController.addListener(
+      () {
+        if (scrollController.position.pixels >=
+            scrollController.position.maxScrollExtent) {
+          dataPage.value++;
+          fetchMovie(dataPage.value);
+
+          print('New Page $dataPage');
+        }
+      },
+    );
   }
 
   @override
@@ -128,4 +130,11 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {}
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    scrollController.dispose();
+  }
 }

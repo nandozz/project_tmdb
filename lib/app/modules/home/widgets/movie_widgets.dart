@@ -34,179 +34,195 @@ class MoviePage extends StatelessWidget {
                 ],
               ),
             ),
-            Obx(
-              () => Container(
-                height: Get.height,
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      childAspectRatio: 2 / 3,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20),
-                  itemCount: homeController.allData.value.length,
-                  itemBuilder: (BuildContext ctx, index) {
-                    favoriteName = '';
-                    homeController.movieFovorite.value.length > 0
-                        ? homeController.movieFovorite.value.forEach((element) {
-                            favoriteName += json.encode(element['title']);
-                          })
-                        : null;
+            GetX<HomeController>(
+              builder: (homeController) => Container(
+                height: Get.height * 0.68,
+                child: homeController.allData.isEmpty
+                    ? Column(
+                        children: [
+                          Center(child: CircularProgressIndicator()),
+                        ],
+                      )
+                    : GridView.builder(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        controller: homeController.scrollController,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                childAspectRatio: 2 / 3,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20),
+                        itemCount: homeController.allData.value.length,
+                        itemBuilder: (BuildContext context, index) {
+                          favoriteName = '';
+                          homeController.movieFovorite.value.length > 0
+                              ? homeController.movieFovorite.value
+                                  .forEach((element) {
+                                  favoriteName += json.encode(element['title']);
+                                })
+                              : null;
 
-                    String title =
-                        '"${homeController.allData.value[index].title}"';
+                          String title =
+                              '"${homeController.allData.value[index].title}"';
 
-                    bool isFavorite = favoriteName.contains(title);
-                    print(
-                        'Check favorite Name $index: $title - $favoriteName - $isFavorite');
-                    return GestureDetector(
-                        onTap: () {
-                          homeController.readFavorite();
-                          Get.to(
-                            () => DetailView(
-                              detail: homeController.allData.value[index],
-                            ),
-                          );
-                        },
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Hero(
-                                  tag:
-                                      '${homeController.allData.value[index].posterPath}',
-                                  child: Image.network(
-                                    'https://image.tmdb.org/t/p/original/${homeController.allData.value[index].posterPath}',
-                                    fit: BoxFit.cover,
-                                    width: Get.width,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return child;
-                                      }
-                                      return Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              homeController
-                                                  .allData.value[index].title,
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            CircularProgressIndicator(
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                          bool isFavorite = favoriteName.contains(title);
+                          print(
+                              '$index/${homeController.allData.length}-${homeController.dataPage}: $title - $favoriteName - $isFavorite');
+
+                          return GestureDetector(
+                              onTap: () {
+                                homeController.readFavorite();
+                                Get.to(
+                                  () => DetailView(
+                                    detail: homeController.allData.value[index],
                                   ),
+                                );
+                              },
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                child: Stack(
                                   children: [
-                                    Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.black87,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Hero(
+                                        tag:
+                                            '${homeController.allData.value[index].posterPath}',
+                                        child: Image.network(
+                                          'https://image.tmdb.org/t/p/original/${homeController.allData.value[index].posterPath}',
+                                          fit: BoxFit.cover,
+                                          width: Get.width,
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    homeController.allData
+                                                        .value[index].title,
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  CircularProgressIndicator(
+                                                    value: loadingProgress
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            loadingProgress
+                                                                .expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
+                                    ),
+                                    Container(
                                       child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 15,
+                                          Container(
+                                            width: 60,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black87,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                bottomRight:
+                                                    Radius.circular(20),
+                                              ),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                  size: 15,
+                                                ),
+                                                Text(
+                                                  homeController.allData
+                                                      .value[index].voteAverage
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.amber,
+                                                      fontSize: 18),
+                                                  // textAlign: TextAlignVertical.center,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          Text(
-                                            homeController.allData.value[index]
-                                                .voteAverage
-                                                .toString(),
-                                            style: TextStyle(
-                                                color: Colors.amber,
-                                                fontSize: 18),
-                                            // textAlign: TextAlignVertical.center,
+                                          Container(
+                                            width: 60,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white70,
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(20),
+                                                bottomLeft: Radius.circular(20),
+                                              ),
+                                            ),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  if (isFavorite) {
+                                                    homeController.movieFovorite
+                                                        .remove(homeController
+                                                            .allData[index]);
+                                                    homeController
+                                                        .saveFavorite();
+                                                    print(
+                                                        'REMOVE from Movie : ${homeController.allData[index].title}');
+                                                  } else {
+                                                    print('ADD from Movie');
+                                                    homeController.movieFovorite
+                                                        .add(homeController
+                                                            .allData[index]
+                                                            .toJson());
+                                                  }
+
+                                                  homeController.saveFavorite();
+                                                  print(
+                                                      '${homeController.allData.value[index].title} Saved');
+                                                  print(homeController
+                                                      .movieFovorite.value);
+                                                },
+                                                icon: Icon(
+                                                  isFavorite
+                                                      ? Icons.favorite
+                                                      : Icons.favorite_outline,
+                                                  color: isFavorite
+                                                      ? Colors.red
+                                                      : Colors.black,
+                                                )),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white70,
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20),
-                                          bottomLeft: Radius.circular(20),
-                                        ),
-                                      ),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            if (isFavorite) {
-                                              homeController.movieFovorite
-                                                  .remove(homeController
-                                                      .allData[index]);
-                                              homeController.saveFavorite();
-                                              print(
-                                                  'REMOVE from Movie : ${homeController.allData[index].title}');
-                                            } else {
-                                              print('ADD from Movie');
-                                              homeController.movieFovorite.add(
-                                                  homeController.allData[index]
-                                                      .toJson());
-                                            }
-
-                                            homeController.saveFavorite();
-                                            print(
-                                                '${homeController.allData.value[index].title} Saved');
-                                            print(homeController
-                                                .movieFovorite.value);
-                                          },
-                                          icon: Icon(
-                                            isFavorite
-                                                ? Icons.favorite
-                                                : Icons.favorite_outline,
-                                            color: isFavorite
-                                                ? Colors.red
-                                                : Colors.black,
-                                          )),
-                                    ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ));
-                  },
-                ),
+                              ));
+                        },
+                      ),
               ),
             ),
           ],
@@ -231,11 +247,16 @@ class Category extends StatelessWidget {
     return Obx(() => GestureDetector(
           onTap: () {
             // print(index);
+            if (homeController.categoryMovie.value != category) {
+              homeController.allData.clear();
+              print('allData Clear');
+              homeController.dataPage.value = 1;
+            }
             homeController.categoryMovie.value = category;
             homeController.fetchCategory.value = fetch;
-            homeController.fetchMovie();
-            // print(
-            //     '${homeController.categoryMovie.value} - ${homeController.fetchCategory.value}');
+            homeController.fetchMovie(homeController.dataPage.value);
+            print(
+                '${homeController.categoryMovie.value} - ${homeController.fetchCategory.value} - page: ${homeController.dataPage.value}');
           },
           child: Container(
             padding: EdgeInsets.all(10),
@@ -325,7 +346,12 @@ class UserWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                      onPressed: () {}, icon: Icon(Icons.search_rounded)),
+                      onPressed: () {
+                        // homeController.dataPage.value++;
+                        // homeController
+                        //     .fetchMovie(homeController.dataPage.value);
+                      },
+                      icon: Icon(Icons.search_rounded)),
                 ],
               ),
             ],

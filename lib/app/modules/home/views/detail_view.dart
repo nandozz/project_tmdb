@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/model/movie.dart';
 import '../controllers/home_controller.dart';
@@ -15,6 +16,8 @@ class DetailView extends StatelessWidget {
     print('uri - ${detail.id}');
 
     homeController.fetchCast(detail.id!);
+    homeController.fetchVideos(detail.id!);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -33,6 +36,35 @@ class DetailView extends StatelessWidget {
                         'https://image.tmdb.org/t/p/original/${detail.posterPath}',
                         fit: BoxFit.fill,
                       )),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Container(
+                    height: Get.height,
+                    width: Get.width,
+                    // color: Colors.amber,
+                    child: IconButton(
+                      onPressed: () async {
+                        print(
+                            'play - ${homeController.allVideos.value[0].key}');
+                        final url =
+                            'https://www.youtube.com/watch?v=${homeController.allVideos.value[0].key}';
+                        if (await canLaunch(url)) {
+                          print('GO YOUTUBE');
+                          await launch(url,
+                              enableJavaScript: true, forceWebView: true);
+                        } else {
+                          print('error..');
+                        }
+                      },
+                      icon: Icon(
+                        Icons.play_circle,
+                        size: 100,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ),
                 ),
                 Container(
                   width: Get.width,
@@ -68,18 +100,6 @@ class DetailView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Positioned(
-                  top: Get.height * 0.23,
-                  left: Get.width * 0.37,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.play_circle,
-                      size: 100,
-                      color: Colors.white70,
-                    ),
-                  ),
-                )
               ],
             ),
             Expanded(

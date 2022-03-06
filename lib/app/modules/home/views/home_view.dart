@@ -24,40 +24,42 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
-      bottomNavigationBar: Obx(() => BottomNavigationBar(
-            currentIndex: controller.indexPage.value,
-            onTap: (index) {
-              // controller.changePage(index);
-              controller.indexPage.value = index;
-            },
-            backgroundColor: Color(0xff303243),
-            selectedItemColor: Colors.white,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.movie,
-                  size: 30,
-                  // color: Color(0xff136A5A),
-                ),
-                label: 'Movie',
+      bottomNavigationBar: Obx(
+        () => BottomNavigationBar(
+          currentIndex: controller.indexPage.value,
+          onTap: (index) {
+            // controller.changePage(index);
+            controller.indexPage.value = index;
+          },
+          backgroundColor: Color(0xff303243),
+          selectedItemColor: Colors.white,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.movie,
+                size: 30,
+                // color: Color(0xff136A5A),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.favorite,
-                  size: 30,
-                ),
-                label: 'Favorite',
+              label: 'Movie',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.favorite,
+                size: 30,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.live_tv,
-                  size: 30,
-                  // color: Color(0xff136A5A),
-                ),
-                label: 'TV Show',
+              label: 'Favorite',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.live_tv,
+                size: 30,
+                // color: Color(0xff136A5A),
               ),
-            ],
-          )),
+              label: 'TV Show',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

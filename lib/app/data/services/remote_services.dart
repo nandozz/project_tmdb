@@ -7,6 +7,7 @@ import '../model/movie.dart';
 import '../model/playing.dart';
 import '../model/popular.dart';
 import '../model/toprated.dart';
+import '../model/videos.dart';
 
 String apikey = '91b8baa082ac5f8b8cb042e3683306ab';
 
@@ -30,11 +31,11 @@ class RemoteServices {
     }
   }
 
-  static Future<Movie?> fetchMovie() async {
+  static Future<Movie?> fetchMovie(int page) async {
     HomeController homeController = Get.find<HomeController>();
     var response = await client.get(
       Uri.parse(
-          'https://api.themoviedb.org/3/movie/${homeController.fetchCategory.value}?api_key=$apikey'),
+          'https://api.themoviedb.org/3/movie/${homeController.fetchCategory.value}?api_key=$apikey&language=en-US&page=$page'),
     );
 
     if (response.statusCode == 200) {
@@ -60,32 +61,17 @@ class RemoteServices {
       return null;
     }
   }
-  // static Future<Popular?> fetchPopular() async {
-  //   var response = await client.get(
-  //     Uri.parse('https://api.themoviedb.org/3/movie/popular?api_key=$apikey'),
-  //   );
 
-  //   if (response.statusCode == 200) {
-  //     var jsonString = response.body;
-  //     return popularFromJson(jsonString);
-  //   } else {
-  //     //error message
-  //     return null;
-  //   }
-  // }
+  static Future<Videos?> fetchVideos(int id) async {
+    var response = await client.get(Uri.parse(
+        'https://api.themoviedb.org/3/movie/$id/videos?api_key=${apikey}'));
 
-  // static Future<TopRated?> fetchTopRated() async {
-  //   var response = await client.get(
-  //     Uri.parse('https://api.themoviedb.org/3/movie/top_rated?api_key=$apikey'),
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     var jsonString = response.body;
-  //     return topRatedFromJson(jsonString);
-  //   } else {
-  //     //error message
-  //     return null;
-  //   }
-  // }
-
+    if (response.statusCode == 200) {
+      var jsonString = response.body;
+      return videosFromJson(jsonString);
+    } else {
+      //error message
+      return null;
+    }
+  }
 }
