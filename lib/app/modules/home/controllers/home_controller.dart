@@ -101,7 +101,10 @@ class HomeController extends GetxController {
   void clearFavorite() async {
     print('All Favorite CLEAR');
     movieFavorite.clear();
+    movieFavorite.refresh;
     tvshowFavorite.clear();
+    tvshowFavorite.refresh();
+
     final box = GetStorage();
     box.remove('myFavorite');
   }

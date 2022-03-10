@@ -55,8 +55,8 @@ class TvPage extends StatelessWidget {
                         itemCount: homeController.allTv.value.length,
                         itemBuilder: (BuildContext context, index) {
                           favoriteName = '';
-                          homeController.movieFavorite.value.length > 0
-                              ? homeController.movieFavorite.value
+                          homeController.tvshowFavorite.value.length > 0
+                              ? homeController.tvshowFavorite.value
                                   .forEach((element) {
                                   favoriteName += json.encode(element['name']);
                                 })
@@ -198,7 +198,7 @@ class TvPage extends StatelessWidget {
                                                         .favorite = false;
 
                                                     homeController
-                                                        .movieFavorite.value
+                                                        .tvshowFavorite.value
                                                         .removeWhere(
                                                             (element) =>
                                                                 element["id"] ==
@@ -209,10 +209,11 @@ class TvPage extends StatelessWidget {
                                                                     .id);
 
                                                     print(
-                                                        'REMOVE ${homeController.allTv.value[index].toJson()} FROM ${homeController.movieFavorite}');
+                                                        'REMOVE ${homeController.allTv.value[index].toJson()} FROM ${homeController.tvshowFavorite}');
                                                   } else {
                                                     print('ADD from TV');
-                                                    homeController.movieFavorite
+                                                    homeController
+                                                        .tvshowFavorite
                                                         .add(homeController
                                                             .allTv[index]
                                                             .toJson());
@@ -230,12 +231,12 @@ class TvPage extends StatelessWidget {
                                                           .favorite;
                                                   homeController.allTv
                                                       .refresh();
-                                                  homeController.movieFavorite
+                                                  homeController.tvshowFavorite
                                                       .refresh();
 
                                                   homeController.saveFavorite();
                                                   print(homeController
-                                                      .movieFavorite.value);
+                                                      .tvshowFavorite.value);
                                                 },
                                                 icon: Obx(() => Icon(
                                                       homeController
