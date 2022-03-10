@@ -1,26 +1,27 @@
+// To parse this JSON data, do
+//
+//     final tvShow = tvShowFromJson(jsonString);
+
 import 'dart:convert';
 
-Playing playingFromJson(String str) => Playing.fromJson(json.decode(str));
+TvShow tvShowFromJson(String str) => TvShow.fromJson(json.decode(str));
 
-String playingToJson(Playing data) => json.encode(data.toJson());
+String tvShowToJson(TvShow data) => json.encode(data.toJson());
 
-class Playing {
-  Playing({
-    this.dates,
+class TvShow {
+  TvShow({
     this.page,
     required this.results,
     this.totalPages,
     this.totalResults,
   });
 
-  Dates? dates;
   int? page;
   List<Result> results;
   int? totalPages;
   int? totalResults;
 
-  factory Playing.fromJson(Map<String, dynamic> json) => Playing(
-        dates: Dates.fromJson(json["dates"]),
+  factory TvShow.fromJson(Map<String, dynamic> json) => TvShow(
         page: json["page"],
         results:
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
@@ -29,7 +30,6 @@ class Playing {
       );
 
   Map<String, dynamic> toJson() => {
-        "dates": dates!.toJson(),
         "page": page,
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
         "total_pages": totalPages,
@@ -37,89 +37,70 @@ class Playing {
       };
 }
 
-class Dates {
-  Dates({
-    this.maximum,
-    this.minimum,
-  });
-
-  DateTime? maximum;
-  DateTime? minimum;
-
-  factory Dates.fromJson(Map<String, dynamic> json) => Dates(
-        maximum: DateTime.parse(json["maximum"]),
-        minimum: DateTime.parse(json["minimum"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "maximum":
-            "${maximum!.year.toString().padLeft(4, '0')}-${maximum!.month.toString().padLeft(2, '0')}-${maximum!.day.toString().padLeft(2, '0')}",
-        "minimum":
-            "${minimum!.year.toString().padLeft(4, '0')}-${minimum!.month.toString().padLeft(2, '0')}-${minimum!.day.toString().padLeft(2, '0')}",
-      };
-}
-
 class Result {
   Result({
-    this.adult,
     this.backdropPath,
+    this.firstAirDate,
+    this.genreIds,
     this.id,
+    this.name,
+    this.originCountry,
     this.originalLanguage,
-    this.originalTitle,
+    this.originalName,
     this.overview,
     this.popularity,
     this.posterPath,
-    this.releaseDate,
-    this.title,
-    this.video,
     this.voteAverage,
     this.voteCount,
+    this.favorite = false,
   });
 
-  bool? adult;
   String? backdropPath;
+  DateTime? firstAirDate;
+  List<int>? genreIds;
   int? id;
+  String? name;
+  List<String>? originCountry;
   String? originalLanguage;
-  String? originalTitle;
+  String? originalName;
   String? overview;
   double? popularity;
   String? posterPath;
-  DateTime? releaseDate;
-  String? title;
-  bool? video;
   double? voteAverage;
   int? voteCount;
+  bool? favorite;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
-        adult: json["adult"],
         backdropPath: json["backdrop_path"],
+        firstAirDate: DateTime.parse(json["first_air_date"]),
+        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
+        name: json["name"],
+        originCountry: List<String>.from(json["origin_country"].map((x) => x)),
         originalLanguage: json["original_language"],
-        originalTitle: json["original_title"],
+        originalName: json["original_name"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
         posterPath: json["poster_path"],
-        releaseDate: DateTime.parse(json["release_date"]),
-        title: json["title"],
-        video: json["video"],
         voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],
       );
 
   Map<String, dynamic> toJson() => {
-        "adult": adult,
         "backdrop_path": backdropPath,
+        "first_air_date":
+            "${firstAirDate!.year.toString().padLeft(4, '0')}-${firstAirDate!.month.toString().padLeft(2, '0')}-${firstAirDate!.day.toString().padLeft(2, '0')}",
+        "genre_ids": List<dynamic>.from(genreIds!.map((x) => x)),
         "id": id,
+        "name": name,
+        "origin_country": List<dynamic>.from(originCountry!.map((x) => x)),
         "original_language": originalLanguage,
-        "original_title": originalTitle,
+        "original_name": originalName,
         "overview": overview,
         "popularity": popularity,
         "poster_path": posterPath,
-        "release_date":
-            "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
-        "title": title,
-        "video": video,
         "vote_average": voteAverage,
         "vote_count": voteCount,
+        "favorite": favorite,
       };
 }

@@ -4,9 +4,7 @@ import 'package:tmdb_test/app/modules/home/controllers/home_controller.dart';
 
 import '../model/cast.dart';
 import '../model/movie.dart';
-import '../model/playing.dart';
-import '../model/popular.dart';
-import '../model/toprated.dart';
+import '../model/tvshow.dart';
 import '../model/videos.dart';
 
 String apikey = '91b8baa082ac5f8b8cb042e3683306ab';
@@ -41,6 +39,22 @@ class RemoteServices {
     if (response.statusCode == 200) {
       var jsonString = response.body;
       return movieFromJson(jsonString);
+    } else {
+      //error message
+      return null;
+    }
+  }
+
+  static Future<TvShow?> fetchTv(int page) async {
+    HomeController homeController = Get.find<HomeController>();
+    var response = await client.get(
+      Uri.parse(
+          'https://api.themoviedb.org/3/tv/${homeController.fetchCategory.value}?api_key=$apikey&language=en-US&page=$page'),
+    );
+
+    if (response.statusCode == 200) {
+      var jsonString = response.body;
+      return tvShowFromJson(jsonString);
     } else {
       //error message
       return null;

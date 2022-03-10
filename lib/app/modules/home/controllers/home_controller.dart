@@ -9,20 +9,21 @@ import '../../../data/model/movie.dart';
 class HomeController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
+  RxString categoryTvShow = 'On the Air'.obs;
   RxString categoryMovie = 'Now Playing'.obs;
   RxString fetchCategory = 'now_playing'.obs;
 
-  RxString categoryTvShow = 'On the Air'.obs;
   RxInt indexPage = 0.obs;
   RxInt indexCategory = 0.obs;
   RxInt dataPage = 1.obs;
 
   RxList allData = [].obs;
+  RxList allTv = [].obs;
   RxList allCast = [].obs;
   RxList allVideos = [].obs;
 
-  RxList movieFovorite = [].obs;
-  RxList tvshowFovorite = [].obs;
+  RxList movieFavorite = [].obs;
+  RxList tvshowFavorite = [].obs;
   // RxBool isFavorite = false.obs;
 
   void fetchPlaying() async {
@@ -49,6 +50,20 @@ class HomeController extends GetxController {
     }
   }
 
+  void fetchTv(int page) async {
+    var data = await RemoteServices.fetchTv(page);
+    if (data != null) {
+      allTv.value.addAll(data.results);
+      allTv.refresh();
+
+      // allTv.value = receiveData.value;
+      // print('allTv - : ${allTv.value[0].title}');
+      print('allTv length: ${allTv.value.length}');
+    } else {
+      print('error add datanya cuy');
+    }
+  }
+
   void fetchCast(int id) async {
     var data = await RemoteServices.fetchCast(id);
     if (data != null) {
@@ -70,23 +85,23 @@ class HomeController extends GetxController {
   }
 
   void saveFavorite() async {
-    movieFovorite.value = movieFovorite.toSet().toList();
-    tvshowFovorite.value = tvshowFovorite.toSet().toList();
+    movieFavorite.value = movieFavorite.toSet().toList();
+    tvshowFavorite.value = tvshowFavorite.toSet().toList();
 
     final box = GetStorage();
     await box.write(
       'myFavorite',
       {
-        'movie': movieFovorite.value,
-        'tvshow': tvshowFovorite.value,
+        'movie': movieFavorite.value,
+        'tvshow': tvshowFavorite.value,
       },
     );
   }
 
   void clearFavorite() async {
     print('All Favorite CLEAR');
-    movieFovorite.clear();
-    tvshowFovorite.clear();
+    movieFavorite.clear();
+    tvshowFavorite.clear();
     final box = GetStorage();
     box.remove('myFavorite');
   }
@@ -96,13 +111,13 @@ class HomeController extends GetxController {
     final box = GetStorage();
     final data = await box.read('myFavorite') as Map<String, dynamic>;
     print('GET DATA : ${data['movie']}');
-    movieFovorite.value = await List<dynamic>.from(data['movie']);
-    print('GET Favovrite Length : ${movieFovorite.value.length}');
+    movieFavorite.value = await List<dynamic>.from(data['movie']);
+    print('GET Favovrite Length : ${movieFavorite.value.length}');
 
-    tvshowFovorite.value = await List<dynamic>.from(data['tvshow']);
+    tvshowFavorite.value = await List<dynamic>.from(data['tvshow']);
 
-    // print('GET MOVIE memory : ${movieFovorite.value[0].runtimeType}');
-    // print('GET TV SHOW memory : ${tvshowFovorite}');
+    // print('GET MOVIE memory : ${movieFavorite.value[0].runtimeType}');
+    // print('GET TV SHOW memory : ${tvshowFavorite}');
   }
 
   @override

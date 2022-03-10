@@ -96,7 +96,7 @@ class FavoritePage extends StatelessWidget {
                                           crossAxisSpacing: 20,
                                           mainAxisSpacing: 20),
                                   itemCount:
-                                      homeController.movieFovorite.value.length,
+                                      homeController.movieFavorite.value.length,
                                   itemBuilder: (BuildContext ctx, index) {
                                     return DecoratedBox(
                                       decoration: BoxDecoration(
@@ -110,7 +110,7 @@ class FavoritePage extends StatelessWidget {
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             child: Image.network(
-                                              'https://image.tmdb.org/t/p/original/${homeController.movieFovorite[index]['poster_path']}',
+                                              'https://image.tmdb.org/t/p/original/${homeController.movieFavorite[index]['poster_path']}',
                                               fit: BoxFit.cover,
                                               width: Get.width,
                                               loadingBuilder:
@@ -186,9 +186,9 @@ class FavoritePage extends StatelessWidget {
                                                       ),
                                                       Text(
                                                         homeController
-                                                            .allData
+                                                            .movieFavorite
                                                             .value[index]
-                                                            .voteAverage
+                                                                ['vote_average']
                                                             .toString(),
                                                         style: TextStyle(
                                                             color: Colors.amber,
@@ -217,7 +217,7 @@ class FavoritePage extends StatelessWidget {
                                                         Get.defaultDialog(
                                                           title: 'Delete',
                                                           middleText:
-                                                              'Are you sure to delete ${homeController.movieFovorite[index]['title']} ?',
+                                                              'Are you sure to delete ${homeController.movieFavorite[index]['title']}\nfrom your favorite ?',
                                                           textCancel: 'Cancel',
                                                           cancelTextColor:
                                                               Colors.black87,
@@ -228,11 +228,15 @@ class FavoritePage extends StatelessWidget {
                                                               Colors.black87,
                                                           onCancel: () {},
                                                           onConfirm: () {
+                                                            // print(
+                                                            //     'REMOVE ${homeController.movieFavorite.value[index].toJson()} FROM ${homeController.movieFavorite}');
+
                                                             homeController
-                                                                .movieFovorite
+                                                                .movieFavorite
                                                                 .remove(homeController
-                                                                        .movieFovorite[
+                                                                        .movieFavorite[
                                                                     index]);
+
                                                             homeController
                                                                 .saveFavorite();
                                                             Get.back();

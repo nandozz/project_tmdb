@@ -35,6 +35,7 @@ class Result {
     this.releaseDate,
     this.title,
     this.voteAverage,
+    this.favorite = false,
   });
   int? id;
   String? originalLanguage;
@@ -44,6 +45,7 @@ class Result {
   DateTime? releaseDate;
   String? title;
   double? voteAverage;
+  bool? favorite;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["id"],
@@ -66,5 +68,6 @@ class Result {
             "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
         "title": title,
         "vote_average": voteAverage,
+        "favorite": favorite,
       };
 }

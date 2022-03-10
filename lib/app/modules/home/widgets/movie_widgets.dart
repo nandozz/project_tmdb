@@ -6,7 +6,7 @@ import 'dart:convert';
 // import 'package:tmdb_test/app/modules/home/widgets/card.dart';
 
 HomeController homeController = Get.find<HomeController>();
-// bool isFavorite = true;
+// bool isFavorite = false;
 String favoriteName = '';
 
 class MoviePage extends StatelessWidget {
@@ -55,8 +55,8 @@ class MoviePage extends StatelessWidget {
                         itemCount: homeController.allData.value.length,
                         itemBuilder: (BuildContext context, index) {
                           favoriteName = '';
-                          homeController.movieFovorite.value.length > 0
-                              ? homeController.movieFovorite.value
+                          homeController.movieFavorite.value.length > 0
+                              ? homeController.movieFavorite.value
                                   .forEach((element) {
                                   favoriteName += json.encode(element['title']);
                                 })
@@ -65,9 +65,12 @@ class MoviePage extends StatelessWidget {
                           String title =
                               '"${homeController.allData.value[index].title}"';
 
-                          bool isFavorite = favoriteName.contains(title);
+                          // isFavorite = favoriteName.contains(title);
+                          homeController.allData.value[index].favorite =
+                              favoriteName.contains(title);
+                          ;
                           print(
-                              '$index/${homeController.allData.length}-${homeController.dataPage}: $title - $favoriteName - $isFavorite');
+                              '$index/${homeController.allData.length}-${homeController.dataPage}: $title - $favoriteName - ${homeController.allData.value[index].favorite}');
 
                           return GestureDetector(
                               onTap: () {
@@ -95,6 +98,7 @@ class MoviePage extends StatelessWidget {
                                           'https://image.tmdb.org/t/p/original/${homeController.allData.value[index].posterPath}',
                                           fit: BoxFit.cover,
                                           width: Get.width,
+                                          height: Get.height,
                                           loadingBuilder: (BuildContext context,
                                               Widget child,
                                               ImageChunkEvent?
@@ -184,36 +188,70 @@ class MoviePage extends StatelessWidget {
                                             ),
                                             child: IconButton(
                                                 onPressed: () {
-                                                  if (isFavorite) {
-                                                    homeController.movieFovorite
-                                                        .remove(homeController
-                                                            .allData[index]);
+                                                  print(
+                                                      'isFavorite: ${homeController.allData.value[index].favorite}');
+                                                  if (homeController.allData
+                                                      .value[index].favorite) {
                                                     homeController
-                                                        .saveFavorite();
+                                                        .allData
+                                                        .value[index]
+                                                        .favorite = false;
+
+                                                    homeController
+                                                        .movieFavorite.value
+                                                        .removeWhere(
+                                                            (element) =>
+                                                                element["id"] ==
+                                                                homeController
+                                                                    .allData
+                                                                    .value[
+                                                                        index]
+                                                                    .id);
+
                                                     print(
-                                                        'REMOVE from Movie : ${homeController.allData[index].title}');
+                                                        'REMOVE ${homeController.allData.value[index].toJson()} FROM ${homeController.movieFavorite}');
                                                   } else {
                                                     print('ADD from Movie');
-                                                    homeController.movieFovorite
+                                                    homeController.movieFavorite
                                                         .add(homeController
                                                             .allData[index]
                                                             .toJson());
+
+                                                    print(
+                                                        '${homeController.allData.value[index].title} Saved');
                                                   }
+                                                  homeController
+                                                          .allData
+                                                          .value[index]
+                                                          .favorite =
+                                                      !homeController
+                                                          .allData
+                                                          .value[index]
+                                                          .favorite;
+                                                  homeController.allData
+                                                      .refresh();
+                                                  homeController.movieFavorite
+                                                      .refresh();
 
                                                   homeController.saveFavorite();
-                                                  print(
-                                                      '${homeController.allData.value[index].title} Saved');
                                                   print(homeController
-                                                      .movieFovorite.value);
+                                                      .movieFavorite.value);
                                                 },
-                                                icon: Icon(
-                                                  isFavorite
-                                                      ? Icons.favorite
-                                                      : Icons.favorite_outline,
-                                                  color: isFavorite
-                                                      ? Colors.red
-                                                      : Colors.black,
-                                                )),
+                                                icon: Obx(() => Icon(
+                                                      homeController
+                                                              .allData
+                                                              .value[index]
+                                                              .favorite
+                                                          ? Icons.favorite
+                                                          : Icons
+                                                              .favorite_outline,
+                                                      color: homeController
+                                                              .allData
+                                                              .value[index]
+                                                              .favorite
+                                                          ? Colors.red
+                                                          : Colors.black,
+                                                    ))),
                                           ),
                                         ],
                                       ),
@@ -263,7 +301,7 @@ class Category extends StatelessWidget {
             // height: 40,
             margin: EdgeInsets.only(bottom: 40),
             decoration: BoxDecoration(
-                color: category == homeController.categoryMovie.value
+                color: fetch == homeController.fetchCategory.value
                     ? Colors.black87
                     : Colors.transparent,
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -271,11 +309,11 @@ class Category extends StatelessWidget {
               child: Text(
                 category,
                 style: TextStyle(
-                    color: category == homeController.categoryMovie.value
+                    color: fetch == homeController.fetchCategory.value
                         ? Colors.white
                         : Colors.grey,
                     fontSize: 14,
-                    fontWeight: category == homeController.categoryMovie.value
+                    fontWeight: fetch == homeController.fetchCategory.value
                         ? FontWeight.w800
                         : FontWeight.normal),
               ),

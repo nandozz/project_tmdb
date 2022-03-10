@@ -89,12 +89,20 @@ class DetailView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                          size: 45,
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            detail.favorite!
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            color: detail.favorite! ? Colors.red : Colors.black,
+                            size: 30,
+                          ),
                         ),
                       ),
                     ],

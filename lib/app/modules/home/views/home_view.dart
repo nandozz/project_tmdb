@@ -30,9 +30,23 @@ class HomeView extends GetView<HomeController> {
           onTap: (index) {
             // controller.changePage(index);
             controller.indexPage.value = index;
+            switch (index) {
+              case 0:
+                // controller.allData.clear();
+                controller.fetchCategory.value = 'now_playing';
+                controller.fetchMovie(1);
+                break;
+              case 2:
+                // controller.allTv.clear();
+                controller.fetchCategory.value = 'on_the_air';
+                controller.fetchTv(1);
+                break;
+              default:
+            }
           },
           backgroundColor: Color(0xff303243),
           selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white24,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
