@@ -1,21 +1,12 @@
 <<<<<<< HEAD
-# tmdb_test
 
-A new Flutter project.
+# Moviemove app
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# tmdb
-testing tmdb app
+# Feature
+1. Movie: now playiing, top rated, popular, upcoming
+2. TV show : on the air, top rated, popular, airing today
+3. Favorite movie and film
+4. infinite scroll
+5. detail page
+6. trailer
 >>>>>>> 0c62c0e50ce125f8096ee7d261fd74d6915c75e2
