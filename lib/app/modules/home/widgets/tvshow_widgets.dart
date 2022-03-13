@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:tmdb_test/app/modules/home/controllers/home_controller.dart';
 import 'package:tmdb_test/app/modules/home/views/detail_view.dart';
 import 'dart:convert';
+
+import '../views/detail_tv.dart';
 // import 'package:tmdb_test/app/modules/home/widgets/card.dart';
 
 HomeController homeController = Get.find<HomeController>();
@@ -76,7 +78,7 @@ class TvPage extends StatelessWidget {
                               onTap: () {
                                 homeController.readFavorite();
                                 Get.to(
-                                  () => DetailView(
+                                  () => DetailTvView(
                                     detail: homeController.allTv.value[index],
                                   ),
                                 );

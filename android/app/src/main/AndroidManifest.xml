@@ -13,12 +13,15 @@
         <data android:scheme="http" />
     </intent>
    </queries>
+   <uses-permission android:name="android.permission.INTERNET" />
    <application
+        
         android:label="moviemove"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -43,5 +46,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
     </application>
+    
 </manifest>
