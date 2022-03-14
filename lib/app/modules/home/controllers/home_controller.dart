@@ -7,7 +7,8 @@ import 'dart:convert';
 import '../../../data/model/movie.dart';
 
 class HomeController extends GetxController {
-  final ScrollController scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
+  ScrollController scrollController_tv = ScrollController();
 
   RxString categoryTvShow = 'On the Air'.obs;
   RxString categoryMovie = 'Now Playing'.obs;
@@ -60,7 +61,7 @@ class HomeController extends GetxController {
       // print('allTv - : ${allTv.value[0].title}');
       print('allTv length: ${allTv.value.length}');
     } else {
-      print('error add datanya cuy');
+      print('error add data TV cuy');
     }
   }
 
@@ -136,6 +137,17 @@ class HomeController extends GetxController {
           fetchMovie(dataPage.value);
 
           print('New Page $dataPage');
+        }
+      },
+    );
+    scrollController_tv.addListener(
+      () {
+        if (scrollController_tv.position.pixels >=
+            scrollController_tv.position.maxScrollExtent) {
+          dataPage.value++;
+          fetchTv(dataPage.value);
+
+          print('New Page TV $dataPage');
         }
       },
     );

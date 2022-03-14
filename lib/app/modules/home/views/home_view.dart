@@ -10,68 +10,72 @@ import '../widgets/movie_widgets.dart';
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff303243),
-      body: SafeArea(
-        child: Obx(
-          () => IndexedStack(
-            index: controller.indexPage.value,
-            children: [
-              MoviePage(),
-              FavoritePage(),
-              TvPage(),
-            ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Color(0xff303243),
+        body: SafeArea(
+          child: Obx(
+            () => IndexedStack(
+              index: controller.indexPage.value,
+              children: [
+                MoviePage(),
+                FavoritePage(),
+                TvPage(),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          currentIndex: controller.indexPage.value,
-          onTap: (index) {
-            // controller.changePage(index);
-            controller.indexPage.value = index;
-            switch (index) {
-              case 0:
-                // controller.allData.clear();
-                controller.fetchCategory.value = 'now_playing';
-                controller.fetchMovie(1);
-                break;
-              case 2:
-                // controller.allTv.clear();
-                controller.fetchCategory.value = 'on_the_air';
-                controller.fetchTv(1);
-                break;
-              default:
-            }
-          },
-          backgroundColor: Color(0xff303243),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white24,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.movie,
-                size: 30,
-                // color: Color(0xff136A5A),
+        bottomNavigationBar: Obx(
+          () => BottomNavigationBar(
+            currentIndex: controller.indexPage.value,
+            onTap: (index) {
+              // controller.changePage(index);
+              controller.indexPage.value = index;
+              controller.dataPage.value = 1;
+              switch (index) {
+                case 0:
+                  controller.allData.clear();
+                  controller.fetchCategory.value = 'now_playing';
+                  controller.fetchMovie(controller.dataPage.value);
+                  break;
+                case 2:
+                  controller.allTv.clear();
+                  controller.fetchCategory.value = 'on_the_air';
+                  controller.fetchTv(controller.dataPage.value);
+                  break;
+                default:
+              }
+            },
+            backgroundColor: Color(0xff303243),
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.white24,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.movie,
+                  size: 30,
+                  // color: Color(0xff136A5A),
+                ),
+                label: 'Movie',
               ),
-              label: 'Movie',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.favorite,
-                size: 30,
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.favorite,
+                  size: 30,
+                ),
+                label: 'Favorite',
               ),
-              label: 'Favorite',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.live_tv,
-                size: 30,
-                // color: Color(0xff136A5A),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.live_tv,
+                  size: 30,
+                  // color: Color(0xff136A5A),
+                ),
+                label: 'TV Show',
               ),
-              label: 'TV Show',
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

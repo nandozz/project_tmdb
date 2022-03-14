@@ -47,7 +47,7 @@ class TvPage extends StatelessWidget {
                       )
                     : GridView.builder(
                         physics: AlwaysScrollableScrollPhysics(),
-                        controller: homeController.scrollController,
+                        controller: homeController.scrollController_tv,
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
                                 maxCrossAxisExtent: 200,

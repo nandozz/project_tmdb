@@ -260,8 +260,8 @@ class FavoritePage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            //TV Show field
 
+                            //TV Show field
                             Container(
                               child: Obx(
                                 () => GridView.builder(
@@ -427,6 +427,22 @@ class FavoritePage extends StatelessWidget {
                                                       )),
                                                 ),
                                               ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 10,
+                                            child: Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 5, right: 5),
+                                              color: Colors.black87,
+                                              child: Text(
+                                                homeController.tvshowFavorite
+                                                    .value[index]['name'],
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              ),
                                             ),
                                           ),
                                         ],
